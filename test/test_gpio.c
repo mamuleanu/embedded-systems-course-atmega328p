@@ -14,7 +14,7 @@ void test_gpio_init_output(void) {
     GPIO_Init(GPIO_PORTB, 5, GPIO_OUTPUT);
     
     // Check if DDRB bit 5 is set
-    ASSERT_EQUAL((1 << 5), DDRB & (1 << 5));
+    ASSERT_EQUAL((1 << 5), DDRB & (1 << 5))
 }
 
 void test_gpio_init_input(void) {
