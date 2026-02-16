@@ -16,6 +16,7 @@ Found a bug or you just want to contribute to this project ? Please raise an iss
     - **Timer**: 1ms System Tick (`Millis()`) using Timer0 CTC mode.
     - **EEPROM**: Read, Write, Update (lifespan-aware).
     - **ADC**: Blocking 10-bit Analog-to-Digital conversion.
+    - **PWM**: High-level wrapper for Timer1 (16-bit) and Timer2 (8-bit) PWM generation.
 - **Board Support Package (BSP)**: Pin mappings for **Arduino Nano** and **Uno**.
 - **Robust Build System**: `Makefile` for compilation, flashing, and testing.
 - **Host-Based Unit Testing**: Run unit tests on your computer without hardware using register mocking.
@@ -65,7 +66,7 @@ This project supports running unit tests on your host machine (Mac/Linux) by moc
 ### Commands
 | Command | Description |
 |---------|-------------|
-| `make test` | Compile and run unit tests on the host. |
+| `make test` | Compile and run all unit tests (GPIO, PWM) on the host. |
 | `make coverage` | Run tests and generate usage metrics. |
 | `make coverage-html` | Generate a visual HTML report of code coverage. |
 
@@ -88,5 +89,24 @@ int main(void) {
             GPIO_Toggle(LED_BUILTIN);
         }
     }
+}
+
+// PWM Usage Example
+#include "drivers/pwm/pwm.h"
+#include "bsp/uno.h"
+
+int pwm_example(void) {
+    // 50Hz for Servo on D9
+    PWM_Init(UNO_D9, 50);
+    // 1.5ms pulse (approx neutral)
+    // Duty cycle calculation: (1.5ms / 20ms) * ICR1_TOP
+    // Wrapper takes 0-255: (1.5/20)*255 = ~19
+    PWM_SetDutyCycle(UNO_D9, 19);
+
+    // 1kHz LED Dimming on D11
+    PWM_Init(UNO_D11, 1000);
+    PWM_SetDutyCycle(UNO_D11, 128); // 50%
+    
+    return 0;
 }
 ```

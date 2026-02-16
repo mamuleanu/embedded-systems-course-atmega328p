@@ -36,6 +36,23 @@ extern volatile uint16_t EEAR; // 16-bit access
 extern volatile uint8_t EEDR;
 extern volatile uint8_t EECR;
 
+// Timer1 (16-bit)
+extern volatile uint8_t TCCR1A;
+extern volatile uint8_t TCCR1B;
+extern volatile uint16_t TCNT1;
+extern volatile uint16_t OCR1A;
+extern volatile uint16_t OCR1B;
+extern volatile uint16_t ICR1;
+extern volatile uint8_t TIMSK1;
+
+// Timer2 (8-bit)
+extern volatile uint8_t TCCR2A;
+extern volatile uint8_t TCCR2B;
+extern volatile uint8_t TCNT2;
+extern volatile uint8_t OCR2A;
+extern volatile uint8_t OCR2B;
+extern volatile uint8_t TIMSK2;
+
 // ADC
 extern volatile uint8_t ADMUX;
 extern volatile uint8_t ADCSRA;
@@ -60,6 +77,30 @@ extern volatile uint16_t ADC; // 16-bit access
 #define CS00  0
 #define CS01  1
 #define OCIE0A 1
+
+// Timer1
+#define COM1A1 7
+#define COM1B1 5
+#define WGM11 1
+#define WGM13 4
+#define WGM12 3
+#define CS10 0
+#define CS11 1
+#define CS12 2
+#define DDB1 1
+#define DDB2 2
+
+// Timer2
+#define COM2A1 7
+#define COM2B1 5
+#define WGM21 1
+#define WGM20 0
+#define WGM22 3
+#define CS20 0
+#define CS21 1
+#define CS22 2
+#define DDB3 3
+#define DDD3 3
 
 // Interrupts
 #define ISC00 0

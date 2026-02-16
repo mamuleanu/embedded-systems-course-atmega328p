@@ -6,8 +6,9 @@ F_CPU = 16000000UL
 
 # Programmer Settings
 PROGRAMMER = arduino
-PORT = /dev/tty.usbmodem*
-BAUD = 115200
+PORT = /dev/cu.usbserial-21440
+BAUD = 57600
+# BAUD = 115200
 
 # Board Selection (default to nano)
 BOARD ?= nano
@@ -34,7 +35,7 @@ else
 endif
 
 # Source Files
-SRC = src/main.c drivers/gpio/gpio.c drivers/interrupt/external_interrupt.c drivers/timer/timer0.c drivers/eeprom/eeprom.c drivers/adc/adc.c
+SRC = src/main.c drivers/gpio/gpio.c drivers/interrupt/external_interrupt.c drivers/timer/timer0.c drivers/timer/timer1.c drivers/timer/timer2.c drivers/pwm/pwm.c drivers/eeprom/eeprom.c drivers/adc/adc.c
 
 # Object Files
 # Replace .c extension with .o and prepend OBJDIR, keeping directory structure
@@ -73,11 +74,24 @@ clean:
 
 # Test Runner Rule (Host GCC)
 # Compiles test_gpio.c + registers.c
-test: directories
+test_gpio: directories
 	@mkdir -p $(BINDIR)/test
 	gcc -I. -Isrc -Idrivers/gpio -Idrivers/interrupt -Idrivers/timer -Idrivers/eeprom -Idrivers/adc -Ibsp -Iutils -Itest -Itest/mocks -DUNIT_TEST -o $(BINDIR)/test/test_gpio test/test_gpio.c test/mocks/registers.c
-	@echo "Running Tests..."
+	@echo "Running GPIO Tests..."
 	@./$(BINDIR)/test/test_gpio
+
+test_pwm: directories
+	@mkdir -p $(BINDIR)/test
+	gcc -I. -Isrc -Idrivers/gpio -Idrivers/interrupt -Idrivers/timer -Idrivers/eeprom -Idrivers/adc -Ibsp -Iutils -Itest -Itest/mocks -DUNIT_TEST -o $(BINDIR)/test/test_pwm test/test_pwm.c drivers/timer/timer1.c drivers/timer/timer2.c test/mocks/registers.c
+	@echo "Running PWM Tests..."
+	@./$(BINDIR)/test/test_pwm
+
+test_pwm_wrapper: directories
+	@mkdir -p $(BINDIR)/test
+	gcc -I. -Isrc -Idrivers/gpio -Idrivers/interrupt -Idrivers/timer -Idrivers/pwm -Idrivers/eeprom -Idrivers/adc -Ibsp -Iutils -Itest -Itest/mocks -DUNIT_TEST -o $(BINDIR)/test/test_pwm_wrapper test/test_pwm_wrapper.c drivers/timer/timer1.c drivers/timer/timer2.c drivers/pwm/pwm.c test/mocks/registers.c
+	# Run all tests
+test: test_gpio test_pwm test_pwm_wrapper
+	@echo "All tests passed!"
 
 # Code Coverage Target
 coverage: directories
