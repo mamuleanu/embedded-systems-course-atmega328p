@@ -77,6 +77,7 @@ This project supports running unit tests on your host machine (Mac/Linux) by moc
 ```c
 #include "drivers/gpio/gpio.h"
 #include "drivers/timer/timer0.h"
+#include "bsp/nano.h"
 
 int main(void) {
     // Initialize Timer for Millis()
