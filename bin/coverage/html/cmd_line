@@ -1,0 +1,1 @@
+genhtml bin/coverage/coverage_cleaned.info --output-directory bin/coverage/html --ignore-errors unsupported
