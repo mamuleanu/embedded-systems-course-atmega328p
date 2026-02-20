@@ -11,7 +11,7 @@
 
 void test_gpio_init_output(void) {
     // Test initializing PB5 as OUTPUT
-    GPIO_Init(GPIO_PORTB, 5, GPIO_OUTPUT);
+    GPIO_Init(GPIO_PORTB, 5, GPIO_OUTPUT)
     
     // Check if DDRB bit 5 is set
     ASSERT_EQUAL((1 << 5), DDRB & (1 << 5));
