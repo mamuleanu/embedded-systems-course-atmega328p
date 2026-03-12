@@ -7,21 +7,16 @@ int main(void) {
 
     Timer0_Init();
 
-
     GPIO_Init(LED_BUILTIN, GPIO_OUTPUT);
-    GPIO_Init(D8, GPIO_OUTPUT);
-    GPIO_Init(D7, GPIO_OUTPUT);
-    GPIO_Init(D6, GPIO_OUTPUT);
-    GPIO_Init(D9, GPIO_OUTPUT);
     USART_Init_Default();
-    uint32_t last_time = 0;
-    uint8_t counter = 0;
-    uint8_t copy = 0;
-    char* mesaj = "salut";
-    uint32_t wait = 300;
+    uint8_t size;
+    char data[10];
     while (1) {
-
-        USART_Transmit(mesaj, sizeof(mesaj));
+        size = USART_Receive(data,2000);
+        if (size > 0)
+        {
+            USART_Transmit(data, size);
+        }
         DelayT0(300);
     }
 }  

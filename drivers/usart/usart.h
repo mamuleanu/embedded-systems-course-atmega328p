@@ -41,6 +41,6 @@ void USART_Transmit(unsigned char* data, uint8_t size);
  * @param port GPIO Port.
  * @param pin Pin number.
  */
-void USART_Receive(unsigned char* data, uint8_t size);
+int USART_Receive(unsigned char* data, uint16_t timeout);
 
 #endif // PWM_H

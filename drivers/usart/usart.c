@@ -1,5 +1,4 @@
-#include "drivers/timer/timer1.h"
-#include "drivers/timer/timer2.h"
+#include "drivers/timer/timer0.h"
 
 
 
@@ -29,8 +28,9 @@ void USART_Init(unsigned long fosc, unsigned int baud)
  * 
  * @param data - char pointer
  */
-void USART_Transmit(unsigned char* data, uint8_t size)
+void USART_Transmit(void* buffer, uint8_t size)
 {
+    unsigned char* data = (unsigned char*)buffer;
     for (int i = 0; i < size; i++) {
         /* Wait for empty transmit buffer */
         while (!(UCSR0A & (1 << UDRE0)))
@@ -46,13 +46,29 @@ void USART_Transmit(unsigned char* data, uint8_t size)
  * @param 
  * @param 
  */
-void USART_Receive(unsigned char* data, uint8_t size)
+int USART_Receive(void* buffer)
 {
-    for (int i = 0; i < size; i++) {
-        /* Wait for data to be received */
-        while (!(UCSR0A & (1 << RXC0)))
-            ;
-        /* Get and return received data from buffer */
-        data[i] = UDR0;
+    unsigned char* data = (unsigned char*)buffer;
+    int i = 0;
+    uint32_t last_time = Millis();
+
+    // Loop until timeout or buffer is full (save 1 byte for null terminator)
+    while ((Millis() - last_time <= 1000) && (i < 50)) {
+
+        // Non-blocking check for data
+        if (UCSR0A & (1 << RXC0)) {
+            data[i] = UDR0;
+
+            // Reset timer on every successful byte (Optional: Rolling Timeout)
+            last_time = Millis();
+
+            if (data[i] == '\n' || data[i] == '\r') {
+                break;
+            }
+            i++;
+        }
     }
+
+    data[i] = '\0'; // Always null-terminate
+    return i;
 }
