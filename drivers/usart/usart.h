@@ -4,43 +4,42 @@
 #include <stdint.h>
 
 /**
- * @file pwm.h
- * @brief Generic Pulse Width Modulation (PWM) Driver.
- * 
- * Accurately controls the PWM duty cycle for supported pins.
- * Automatically manages underlying Timers (Timer1, Timer2).
+ * @file usart.h
+ * @brief USART communication driver for AVR microcontrollers.
+ *
+ * Provides initialization, byte transmission, and byte reception
+ * over the hardware USART peripheral (USART0).
  */
 
-/**
- * @brief Initialize PWM on a specific pin.
- * 
- * Configures the associated timer for the given pin. 
- * Note: Pins sharing a timer must use compatible frequencies if underlying hardware dictates it.
- * 
- * @param port GPIO Port (GPIO_PORTB, GPIO_PORTD usually).
- * @param pin Pin number (0-7).
- * @param frequency_hz Desired PWM frequency in Hz.
- */
+ /**
+  * @brief Initializes USART with default settings (16MHz, 57600 baud).
+  */
 #define USART_Init_Default() USART_Init(16000000, 57600)
+
+  /**
+   * @brief Initializes USART communication with the specified baud rate.
+   *
+   * @param fosc Oscillator frequency in Hz (e.g. 16000000 for 16MHz)
+   * @param baud Desired baud rate (e.g. 57600)
+   */
 void USART_Init(unsigned long fosc, unsigned int baud);
 
 /**
- * @brief Set the duty cycle for a specific pin.
- * 
- * @param port GPIO Port.
- * @param pin Pin number.
- * @param duty Duty cycle (0-255). 0 = 0%, 255 = 100%.
+ * @brief Transmits a buffer of bytes over USART.
+ *
+ * @param data Pointer to the data buffer to transmit
+ * @param size Number of bytes to send
  */
 void USART_Transmit(unsigned char* data, uint8_t size);
 
 /**
- * @brief Stop PWM on a specific pin.
- * 
- * Disables the PWM output for that pin.
- * 
- * @param port GPIO Port.
- * @param pin Pin number.
+ * @brief Receives bytes over USART into a buffer until a newline,
+ *        carriage return, or timeout. Result is always null-terminated.
+ *
+ * @param data    Pointer to destination buffer (minimum 51 bytes recommended)
+ * @param timeout Maximum wait time in milliseconds before returning
+ * @return        Number of bytes received, excluding the null terminator
  */
 int USART_Receive(unsigned char* data, uint16_t timeout);
 
-#endif // PWM_H
+#endif // USART_H
