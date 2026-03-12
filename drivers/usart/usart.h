@@ -32,7 +32,7 @@ void USART_Init(unsigned long fosc, unsigned int baud);
  * @param data Pointer to the data buffer to transmit
  * @param size Number of bytes to send
  */
-void USART_Transmit(unsigned char* data, uint8_t size);
+void USART_Transmit(void* data, uint8_t size);
 
 /**
  * @brief Receives bytes over USART into a buffer until a newline,
@@ -42,6 +42,6 @@ void USART_Transmit(unsigned char* data, uint8_t size);
  * @param timeout Maximum wait time in milliseconds before returning
  * @return        Number of bytes received, excluding the null terminator
  */
-int USART_Receive(unsigned char* data, uint16_t timeout);
+int USART_Receive(void* data);
 
 #endif // USART_H
