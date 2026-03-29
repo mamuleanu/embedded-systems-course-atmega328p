@@ -13,9 +13,18 @@ int main(void) {
 
     while (1) {
             
-        if (Millis() - last_time >= 1000) {
-            last_time = Millis();
-            GPIO_Toggle(LED_BUILTIN);
+        for(int i = 0 ; i < 12 ; i++) {
+        GPIO_Toggle(LED_BUILTIN);
+        Delay(200); 
+        }
+         for(int i = 0 ; i < 12 ; i++) {
+        GPIO_Toggle(LED_BUILTIN);
+        Delay(500); 
+        }
+        for(int i = 0 ; i < 12 ; i++) {
+        GPIO_Toggle(LED_BUILTIN);
+        Delay(900); 
         }
     }
+
 }
