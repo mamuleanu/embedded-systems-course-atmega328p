@@ -1,21 +1,20 @@
 #include "drivers/gpio/gpio.h"
-#include "drivers/timer/timer0.h"
+#include "drivers/interrupt/external_interrupt.h"
 #include "bsp/nano.h"
+#include "drivers/usart/usart.h"
+#include "drivers/timer/timer0.h"
+#include <avr/io.h>
 
-int main(void) {
-    
+int main()
+{
     Timer0_Init();
-
-    
-    GPIO_Init(LED_BUILTIN, GPIO_OUTPUT);
-
-    uint32_t last_time = 0;
-
+    USART_Init_Default();
+    uint8_t message[20];
+    uint8_t size;
     while (1) {
-            
-        if (Millis() - last_time >= 1000) {
-            last_time = Millis();
-            GPIO_Toggle(LED_BUILTIN);
+        size = USART_Receive(message);
+        if (size > 0) {
+            USART_Transmit(message, size);
         }
     }
 }
